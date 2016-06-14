@@ -87,16 +87,17 @@ var Form = Backbone.View.extend({
     var selectedFields = this.selectedFields = options.fields || _.keys(schema);
 
     //Create fields
-    var me=this,fields = this.fields = {};
+    var me=this;
+    me.fields = {};
 
     _.each(selectedFields, function(key) {
       var fieldSchema = schema[key];
-      fields[key] = me.createField(key, fieldSchema);
+      me.fields[key] = me.createField(key, fieldSchema);
     });
-
+    
     //Create fieldsets
-    var fieldsetSchema = options.fieldsets || _.result(this, 'fieldsets') || _.result(this.model, 'fieldsets') || [selectedFields],
-        fieldsets = this.fieldsets = [];
+    var fieldsetSchema = options.fieldsets || _.result(this, 'fieldsets') || _.result(this.model, 'fieldsets') || [selectedFields];
+    me.fieldsets =[];
 
     _.each(fieldsetSchema, function(itemSchema) {
       me.fieldsets.push(me.createFieldset(itemSchema));
