@@ -1,5 +1,7 @@
 #backbone-forms
 
+## Fork to be compliant with lodash 4.x
+
 A flexible, customisable form framework for Backbone.js applications.
 
 - Simple schema definition to auto-generate forms
