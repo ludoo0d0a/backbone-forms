@@ -1,6 +1,6 @@
 #backbone-forms
 
-## Fork to be compliant with lodash 4.x
+ Fork to be [compliant with lodash 4.x](https://github.com/powmedia/backbone-forms/issues/515)
 
 A flexible, customisable form framework for Backbone.js applications.
 
