@@ -76,20 +76,22 @@ var Form = Backbone.View.extend({
     var selectedFields = this.selectedFields = options.fields || _.keys(schema);
 
     //Create fields
-    var fields = this.fields = {};
+    //Create fields
+    var me=this;
+    me.fields = {};
 
     _.each(selectedFields, function(key) {
       var fieldSchema = schema[key];
-      fields[key] = this.createField(key, fieldSchema);
-    }, this);
-
+      me.fields[key] = me.createField(key, fieldSchema);
+    });
+    
     //Create fieldsets
-    var fieldsetSchema = options.fieldsets || _.result(this, 'fieldsets') || _.result(this.model, 'fieldsets') || [selectedFields],
-        fieldsets = this.fieldsets = [];
+    var fieldsetSchema = options.fieldsets || _.result(this, 'fieldsets') || _.result(this.model, 'fieldsets') || [selectedFields];
+    me.fieldsets =[];
 
     _.each(fieldsetSchema, function(itemSchema) {
-      this.fieldsets.push(this.createFieldset(itemSchema));
-    }, this);
+      me.fieldsets.push(me.createFieldset(itemSchema));
+    });
   },
 
   /**
@@ -1784,9 +1786,18 @@ Form.editors.Select = Form.editors.Base.extend({
    */
   _collectionToHtml: function(collection) {
     //Convert collection to array first
-    var array = [];
+    var array = [], val = 'val', label='label';
+    
+    //Add a custom serializer
+    var serialize = function(model){
+      return { val: model.id, label: model.toString() };
+    };
+    if (collection.serializeModel){
+      serialize = collection.serializeModel;
+    }
+    
     collection.each(function(model) {
-      array.push({ val: model.id, label: model.toString() });
+      array.push(serialize(model));
     });
 
     //Now convert to HTML
@@ -1823,7 +1834,7 @@ Form.editors.Select = Form.editors.Base.extend({
    * @return {String} HTML
    */
   _arrayToHtml: function(array) {
-    var html = $();
+    var me=this, html = $();
 
     //Generate HTML
     _.each(array, function(option) {
@@ -1831,7 +1842,7 @@ Form.editors.Select = Form.editors.Base.extend({
         if (option.group) {
           var optgroup = $("<optgroup>")
             .attr("label",option.group)
-            .html( this._getOptionsHtml(option.options) );
+            .html( me._getOptionsHtml(option.options) );
           html = html.add(optgroup);
         } else {
           var val = (option.val || option.val === 0) ? option.val : '';
@@ -1841,7 +1852,7 @@ Form.editors.Select = Form.editors.Base.extend({
       else {
         html = html.add( $('<option>').text(option) );
       }
-    }, this);
+    });
 
     return html;
   }

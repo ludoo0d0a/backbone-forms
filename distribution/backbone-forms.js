@@ -87,6 +87,7 @@ var Form = Backbone.View.extend({
     var selectedFields = this.selectedFields = options.fields || _.keys(schema);
 
     //Create fields
+    //Create fields
     var me=this;
     me.fields = {};
 
@@ -1796,9 +1797,18 @@ Form.editors.Select = Form.editors.Base.extend({
    */
   _collectionToHtml: function(collection) {
     //Convert collection to array first
-    var array = [];
+    var array = [], val = 'val', label='label';
+    
+    //Add a custom serializer
+    var serialize = function(model){
+      return { val: model.id, label: model.toString() };
+    };
+    if (collection.serializeModel){
+      serialize = collection.serializeModel;
+    }
+    
     collection.each(function(model) {
-      array.push({ val: model.id, label: model.toString() });
+      array.push(serialize(model));
     });
 
     //Now convert to HTML

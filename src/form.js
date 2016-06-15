@@ -62,20 +62,22 @@ var Form = Backbone.View.extend({
     var selectedFields = this.selectedFields = options.fields || _.keys(schema);
 
     //Create fields
-    var fields = this.fields = {};
+    //Create fields
+    var me=this;
+    me.fields = {};
 
     _.each(selectedFields, function(key) {
       var fieldSchema = schema[key];
-      fields[key] = this.createField(key, fieldSchema);
-    }, this);
-
+      me.fields[key] = me.createField(key, fieldSchema);
+    });
+    
     //Create fieldsets
-    var fieldsetSchema = options.fieldsets || _.result(this, 'fieldsets') || _.result(this.model, 'fieldsets') || [selectedFields],
-        fieldsets = this.fieldsets = [];
+    var fieldsetSchema = options.fieldsets || _.result(this, 'fieldsets') || _.result(this.model, 'fieldsets') || [selectedFields];
+    me.fieldsets =[];
 
     _.each(fieldsetSchema, function(itemSchema) {
-      this.fieldsets.push(this.createFieldset(itemSchema));
-    }, this);
+      me.fieldsets.push(me.createFieldset(itemSchema));
+    });
   },
 
   /**
